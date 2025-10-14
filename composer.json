@@ -1,0 +1,36 @@
+{
+    "name": "codewithkyrian/mcp-reactphp-transport",
+    "description": "A high-performance, asynchronous HTTP transport for the PHP MCP SDK, built on ReactPHP.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["mcp", "ai", "llm", "reactphp", "async", "transport"],
+    "authors": [
+        {
+            "name": "Kyrian Obikwelu",
+            "email": "koshnawaza@gmail.com",
+            "homepage": "https://github.com/CodeWithKyrian"
+        }
+    ],
+    "require": {
+        "mcp/sdk": "dev-main",
+        "codewithkyrian/reactphp-http": "3.x-dev as 3.0.0-beta2"
+    },
+    "autoload": {
+        "psr-4": {
+            "CodeWithKyrian\\McpReactPhpTransport\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CodeWithKyrian\\McpReactPhpTransport\\Example\\": "example/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../php-mcp-sdk"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
