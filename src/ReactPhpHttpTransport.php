@@ -101,17 +101,12 @@ class ReactPhpHttpTransport extends BaseTransport implements TransportInterface
         $this->loop->stop();
     }
 
-    public function setSuspendedFiber(?\Fiber $fiber, ?Uuid $sessionId): void
+    public function attachFiberToSession(\Fiber $fiber, Uuid $sessionId): void
     {
-        if (null === $sessionId || null === $fiber) {
-            return;
-        }
         $sessionIdStr = $sessionId->toRfc4122();
-        $this->logger->info('Storing/Updating managed fiber for session.', [
-            'sessionId' => $sessionIdStr,
-            'status' => null,
-        ]);
+        
         $this->managedFibers[$sessionIdStr] = ['fiber' => $fiber, 'status' => null];
+        
         if (null === $this->tickTimer) {
             $this->logger->info('First managed fiber detected. Starting master tick timer.');
             $this->tickTimer = $this->loop->addPeriodicTimer(0.1, $this->tick(...));
@@ -164,9 +159,11 @@ class ReactPhpHttpTransport extends BaseTransport implements TransportInterface
         if (null !== $this->immediateResponse) {
             return $this->createJsonResponse($this->immediateResponse, $this->immediateStatusCode ?? 500);
         }
+
         if (null === $this->sessionId) {
             return $this->createErrorResponse(Error::forInternalError('Session could not be established.'), 500);
         }
+        
         $sessionIdStr = $this->sessionId->toRfc4122();
 
         $outgoingMessages = $this->getOutgoingMessages($this->sessionId);
